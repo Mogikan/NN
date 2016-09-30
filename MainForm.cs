@@ -19,7 +19,7 @@ namespace nn
         private int _indexToTest;
         private static Random _randomGenerator  = new Random();
 
-        private int _step = 5;
+        private int _step = 1;
         public MainForm()
         {
             InitializeComponent();
@@ -47,52 +47,20 @@ namespace nn
 
                     richTextBox1.Text = string.Format("Path: {0}", openFileDialog.FileName);
 
-                    flowLayoutPanel1.BeginInvoke((Action)(()=>DrawBitmaps()));
+                    
                     //DrawBitmaps();
                     textBox1.Text = String.Empty;
                     groupBox2.Enabled = true;
                     groupBox3.Enabled = false;
                     groupBox4.Enabled = false;
-                    button4.Enabled = button5.Enabled = false;
+                    button5.Enabled = true;
+                    button4.Enabled = vectorNumber.Enabled = false;
                 }
             }
             
         }
 
-        private void DrawBitmaps()
-        {
-            flowLayoutPanel1.Controls.Clear();
-            for (int i = 0; i < _trainingSet.SamplesCount; i++)
-            {
-                PictureBox box = new PictureBox() { Size = new Size()
-                             { Height = _trainingSet.SampleHeight + 6, Width = _trainingSet.SampleWidth + 6 }
-                };
-                
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(_trainingSet.SampleWidth, _trainingSet.SampleHeight);
-                for (int x = 0; x < bmp.Height; ++x)
-                {
-                    for (int y = 0; y < bmp.Width; ++y)
-                    {
-                        //bmp.SetPixel(x, y, Color.White);
-                        if(_trainingSet.IsBinary)
-                        {
-                            int val = (int)_trainingSet.Samples[i][x * _trainingSet.SampleWidth + y];
-                            bmp.SetPixel(y, x, val > 0 ? Color.Black : Color.White);
-                        }
-                        else
-                        {
-                            int val = (int) _trainingSet.Samples[i][x * _trainingSet.SampleWidth + y];
-                            Color color = Color.FromArgb(val, val, val);
-                            bmp.SetPixel(y, x,  Color.FromArgb(val, val, val));
-                        }
-                    }
-                }
-
-                flowLayoutPanel1.Controls.Add(box);
-                
-                box.Image = bmp;
-            }
-        }
+       
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -107,10 +75,7 @@ namespace nn
                 }
                 networkParams[buffer.Length] = _trainingSet.ClassesCount;
                 _network = new NeuralNetwork(_trainingSet.SampleSize, networkParams);
-
-                textBox2.Text = String.Empty;
-                textBox3.Text = String.Empty;
-                textBox4.Text = String.Empty;
+                
                 groupBox3.Enabled = true;
                 groupBox4.Enabled = false;
             }
@@ -154,14 +119,16 @@ namespace nn
                         MessageBox.Show("Classes count doesn't match", "Invalid test set", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    button5.Enabled = true;
+                    total.Text = _testSet.SamplesCount.ToString();
+                    vectorNumber.Enabled = true;
+                    button4.Enabled = true;
                 }
             }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            _indexToTest = _randomGenerator.Next(_testSet.SamplesCount);
+            _indexToTest = int.Parse(vectorNumber.Text);// _randomGenerator.Next(_testSet.SamplesCount);
             System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(_testSet.SampleWidth, _testSet.SampleHeight);
             for (int x = 0; x < bmp.Height; ++x)
             {
@@ -187,6 +154,7 @@ namespace nn
 
         private void button4_Click(object sender, EventArgs e)
         {
+            button5_Click(sender, e);
             double[] netIn = _testSet.Samples[_indexToTest];
             double[] result = new double[_testSet.ClassesCount];
             _network.NetworkOut(netIn, out result);
@@ -194,6 +162,22 @@ namespace nn
             for (int i = 0; i < _testSet.ClassesCount; i++)
             {
                 listBox1.Items.Add(String.Format("{0}:  {1}", i + 1, result[i]));
+            }
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            using (var PreviewForm = new PreviewForm(_trainingSet))
+            {
+                PreviewForm.ShowDialog();
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            using (var PreviewForm = new PreviewForm(_testSet))
+            {
+                PreviewForm.ShowDialog();
             }
         }
     }

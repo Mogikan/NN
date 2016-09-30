@@ -106,7 +106,11 @@ namespace nn.classes
             SampleHeight = height;
             ClassesCount = classesCount;
             _fullSamplesCount = samplesCount;
-            SamplesCount = samplesCount / _step + 1;
+            SamplesCount = samplesCount / _step;
+            if (_step > 1 && samplesCount % _step > 0)
+            {
+                SamplesCount += 1;
+            }
             SampleSize = SampleWidth * SampleHeight;
         }
     }

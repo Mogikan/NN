@@ -133,7 +133,7 @@ namespace nn.classes
         {
             double Err = 0.0;
             for (int i = 0; i < realVector.Length; i++)
-                Err += Math.Pow((realVector[i] - ideal[i]), 2);
+                Err += (realVector[i] - ideal[i])* (realVector[i] - ideal[i]);
             return Err / 2;
         }
         /// <summary>
