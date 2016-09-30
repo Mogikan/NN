@@ -56,7 +56,7 @@ namespace nn.classes
             dEdY = new double[outputsCount];
             dEdX = new double[outputsCount];
             dEdW = new double[inputsCount + Bias][];
-            for (int i = 0; i < outputsCount; i++)
+            for (int i = 0; i < inputsCount + Bias; i++)
             {
                 dEdW[i] = new double[outputsCount]; 
             }
