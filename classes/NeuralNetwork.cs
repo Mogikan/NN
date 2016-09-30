@@ -102,11 +102,11 @@ namespace nn.classes
                         //для j нейрона в i слое по k входу:
                         if (k == layers[i].InputsCount)
                         {//bias
-                            arg += 1 * layers[i][k, j];
+                            arg += 1 * layers[i][k][j];
                         }
                         else
                         {
-                            arg += input[k] * layers[i][k, j];
+                            arg += input[k] * layers[i][k][j];
                         }
                     }
                     currentInput[j] = arg;
@@ -131,10 +131,13 @@ namespace nn.classes
         /// <returns></returns>
         private double E(double[] realVector, double[] ideal)
         {
-            double Err = 0.0;
-            for (int i = 0; i < realVector.Length; i++)
-                Err += Math.Pow((realVector[i] - ideal[i]), 2);
-            return Err / 2;
+            double[] eVector = CudaHelper.Subtract(realVector, ideal);
+            CudaHelper.SqrInPlace(ref eVector);
+            return eVector.Sum() / 2;
+            //double Err = 0.0;
+            //for (int i = 0; i < realVector.Length; i++)
+            //    Err += (realVector[i] - ideal[i]) * (realVector[i] - ideal[i]);
+            //return Err / 2;
         }
         /// <summary>
         /// Настройка весов под вектора входа и желаемого выхода

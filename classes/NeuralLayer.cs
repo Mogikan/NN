@@ -26,7 +26,7 @@ namespace nn.classes
         /// <summary>
         /// матрица весов, [число входов * число нейронов]
         /// </summary>
-        private double[,] weights;
+        private double[][] weights;
         /// <summary>
         /// состояние выходов на текущий момент
         /// </summary>
@@ -40,7 +40,7 @@ namespace nn.classes
         /// </summary>
         private double[] dEdY;
         private double[] dEdX;
-        private double[,] dEdW;
+        private double[][] dEdW;
         private const int Bias =1;
         #endregion
         #region methods
@@ -55,7 +55,11 @@ namespace nn.classes
             this.inputsCount = inputsCount;
             dEdY = new double[outputsCount];
             dEdX = new double[outputsCount];
-            dEdW = new double[inputsCount + Bias, outputsCount];
+            dEdW = new double[inputsCount + Bias][];
+            for (int i = 0; i < outputsCount; i++)
+            {
+                dEdW[i] = new double[outputsCount]; 
+            }
         }
         /// <summary>
         /// Генерирует случайные входные веса
@@ -63,13 +67,15 @@ namespace nn.classes
         public void GenerateWeights()
         {
             //выделим память под веса
-            weights = new double[inputsCount+Bias,outputsCount];
+            weights = new double[inputsCount+Bias][];
             //всю матрицу
             for (int i = 0; i < inputsCount+Bias; i++)
-            {                
+            {
+                weights[i] = new double[outputsCount];
+
                 for (int j = 0; j < outputsCount; j++)
                     //заполним случайными числами
-                    weights[i,j] = randomGenerator.NextDouble()-0.5;
+                    weights[i][j] = randomGenerator.NextDouble()-0.5;
             }
         }
         /// <summary>
@@ -78,11 +84,12 @@ namespace nn.classes
         /// <param name="idealOut">Идеальный выходной вектор</param>
         public void CountOutDetivativesAsLast(double[] idealOut)
         {
-            for (int i = 0; i < outputsCount; i++)
-            {
-                //простейшая формула производной от ошибки
-                dEdY[i] = lastOut[i] - idealOut[i];//=dE/dYk3
-            }
+            dEdY = CudaHelper.Subtract(lastOut, idealOut);
+            //for (int i = 0; i < outputsCount; i++)
+            //{
+            //    //простейшая формула производной от ошибки
+            //    dEdY[i] = lastOut[i] - idealOut[i];//=dE/dYk3
+            //}
         }
         /// <summary>
         /// Считает производные по выходам промежуточного слоя
@@ -91,7 +98,7 @@ namespace nn.classes
         /// (того, в который входят связи, исходящие из данного слоя)</param>
         /// <param name="wPrev">Веса связей, исходящих из данного слоя
         /// (берем набор связей, входящих в следующий слой)</param>
-        public void CountOutDerivatives(double[] dEdXPrev,double[,] wPrev)
+        public void CountOutDerivatives(double[] dEdXPrev,double[][] wPrev)
         {
             //по каждому выходу
             for (int n = 0; n < outputsCount; n++)
@@ -100,11 +107,7 @@ namespace nn.classes
                 //k - число входов след. слоя
                 //n - число выходов текущего слоя
                 //т.о. на каждой веточке вносится вклад в ошибку ~ весу
-                double dEdYn = 0.0;
-                for (int i = 0; i < dEdXPrev.Length; i++)
-                {
-                    dEdYn += dEdXPrev[i] * wPrev[n, i];
-                }
+                double dEdYn = CudaHelper.Multiply(dEdXPrev,wPrev[n]).Sum();                
                 dEdY[n] = dEdYn;
             }
         }
@@ -115,11 +118,15 @@ namespace nn.classes
         {
             //проходя через слой, получаем X->Y, Y=Sg(X)
             //производная сигмоида выражается через его значение
-            for (int i = 0; i < outputsCount; i++)
-            {
-                double dYdX = Sigmoid.betta * lastOut[i] * (1 - lastOut[i]);
-                dEdX[i] = dEdY[i] * dYdX;
-            }
+            //for (int i = 0; i < outputsCount; i++)
+            //{
+            //    double dYdX = Sigmoid.betta * lastOut[i] * (1 - lastOut[i]);
+            //    dEdX[i] = dEdY[i] * dYdX;
+            //}
+            double[] dYdX = CudaHelper.Multiply(lastOut, Sigmoid.betta);
+            double[] secondProduction = CudaHelper.Subtract(1,lastOut);
+            CudaHelper.MultiplyInPlace(ref dYdX, secondProduction);
+            dEdX = CudaHelper.Multiply(dEdY, dYdX);
         }
         /// <summary>
         /// Считает производные по весам
@@ -139,11 +146,11 @@ namespace nn.classes
                 {
                     if (i == inputsCount)
                     {
-                        dEdW[i, j] = dEdX[j] * 1;
+                        dEdW[i][j] = dEdX[j] * 1;
                     }
                     else
                     {
-                        dEdW[i, j] = dEdX[j] * yprev[i];
+                        dEdW[i][j] = dEdX[j] * yprev[i];
                     }
                 }                 
             }
@@ -154,11 +161,11 @@ namespace nn.classes
         /// <param name="delta"></param>
         public void Update(double delta)
         {
-            for(int i=0;i<inputsCount + Bias;i++)
-                for (int j = 0; j < outputsCount; j++)
-                {
-                    weights[i, j] -= delta * dEdW[i, j];
-                }
+            for (int i = 0; i < inputsCount + Bias; i++)
+            {
+                double[] gradient = CudaHelper.Multiply(dEdW[i], delta);
+                CudaHelper.SubtractInPlace(ref weights[i], gradient);                
+            }
         }
         #endregion
         #region properties
@@ -176,10 +183,10 @@ namespace nn.classes
         /// <param name="inp">Номер нейрона в слое</param>
         /// <param name="outp">Номер входа</param>
         /// <returns></returns>
-        public double this[int inp, int outp] 
+        public double[] this[int inp]
         { 
-            get { return weights[inp, outp]; } 
-            set { weights[inp, outp] = value; } 
+            get { return weights[inp]; } 
+            set { weights[inp] = value; } 
         }
         /// <summary>
         /// Возвращает или устанавливает состояние всех нейронов слоя
@@ -190,7 +197,7 @@ namespace nn.classes
         /// </summary>
         public double[] LastIn { get { return lastIn; } set { lastIn = value; } }
         public double[] DEDX { get { return dEdX; } }
-        public double[,] W { get { return weights; } }
+        public double[][] W { get { return weights; } }
         #endregion
     }
 }
