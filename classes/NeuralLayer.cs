@@ -144,14 +144,7 @@ namespace nn.classes
             {                
                 for (int j = 0; j < outputsCount; j++)
                 {
-                    if (i == inputsCount)
-                    {
-                        dEdW[i][j] = dEdX[j] * 1;
-                    }
-                    else
-                    {
-                        dEdW[i][j] = dEdX[j] * yprev[i];
-                    }
+                    dEdW[i][j] = dEdX[j] * yprev[i];                 
                 }                 
             }
         }

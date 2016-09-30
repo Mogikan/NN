@@ -88,7 +88,7 @@ namespace nn.classes
             {
                 double[] output;
                 double[] currentInput;
-                output = new double[layers[i].OutputsCount];
+                output = new double[layers[i].OutputsCount+1];
                 currentInput = new double[layers[i].OutputsCount];
                 //по всем нейронам в слое
                 for (int j = 0; j < layers[i].OutputsCount; j++)
@@ -100,19 +100,13 @@ namespace nn.classes
                     {
                         //на каждом шаге надо добавить очередной "вклад"
                         //для j нейрона в i слое по k входу:
-                        if (k == layers[i].InputsCount)
-                        {//bias
-                            arg += 1 * layers[i][k][j];
-                        }
-                        else
-                        {
-                            arg += input[k] * layers[i][k][j];
-                        }
+                        arg += input[k] * layers[i][k][j];                        
                     }
                     currentInput[j] = arg;
                     //выход нейрона = сигмоидальная функция от входного значения
                     output[j] = Sigmoid.Sg(currentInput[j]);
                 }
+                output[layers[i].OutputsCount] = 1;
                 //сохраним состояние слоя
                 layers[i].LastOut = output;
                 layers[i].LastIn = currentInput;

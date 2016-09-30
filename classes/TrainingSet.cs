@@ -64,6 +64,8 @@ namespace nn.classes
                                 double.TryParse(sampleValuesBuffer[i], out currentValue);
                                 Samples[sampleIndex / _step][i] = currentValue;
                             }
+                            //Bias
+                            Samples[sampleIndex / _step][SampleSize] = 1;
                         }
                         int expectedClass;
                         int.TryParse(reader.ReadLine(), out expectedClass);
@@ -82,7 +84,7 @@ namespace nn.classes
             Answers = new double[SamplesCount][];
             for (int i = 0; i < SamplesCount; i++)
             {
-                Samples[i] = new double[SampleSize];
+                Samples[i] = new double[SampleSize+1];
                 Answers[i] = new double[ClassesCount];
             }
         }
