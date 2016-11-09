@@ -160,6 +160,47 @@ namespace nn.classes
                     weights[i, j] -= delta * dEdW[i, j];
                 }
         }
+        private double mc = 0.9;
+       
+        private double[,] _dxPrev;
+        public void UpdateWithMomentum(double delta)
+        {
+            //dX = lr * dperf / dX 
+            //dX = delta * dEdW
+
+            //normal
+
+            //dX = mc * dXprev + delta * (1 - mc) * dperf / dX
+            //dX = mc * delta * _savedDeDw + delta * (1-mc)* DEDW
+            //momentum
+            //
+            if (_dxPrev == null)
+            {
+                _dxPrev = new double[dEdW.GetLength(0), dEdW.GetLength(1)];
+
+                for (int i = 0; i < inputsCount + Bias; i++)
+                {
+                    for (int j = 0; j < outputsCount; j++)
+                    {
+                        _dxPrev[i, j] = delta * dEdW[i, j];
+                        weights[i, j] -= _dxPrev[i, j];
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < inputsCount + Bias; i++)
+                {
+                    for (int j = 0; j < outputsCount; j++)
+                    {
+                        _dxPrev[i, j] = mc * _dxPrev[i, j] + delta * (1 - mc) * dEdW[i, j];
+                        weights[i, j] -= _dxPrev[i, j];
+
+                    }
+                }
+
+            }
+        }
         #endregion
         #region properties
         /// <summary>

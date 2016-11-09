@@ -145,7 +145,7 @@ namespace nn.classes
         /// </summary>
         /// <param name="ideal"></param>
         /// <param name="inX"></param>
-        private void CorrectError(double[] ideal, double[] inX)
+        private void CorrectError(double[] ideal, double[] inX,Method method)
         {
             //надо пройти по всем слоям и посчитать производные
             for (int i = layersCount - 1; i >= 0; i--)
@@ -171,7 +171,16 @@ namespace nn.classes
             }
             //Все dE/dW посчитаны, обновим веса
             for (int i = layersCount - 1; i >= 0; i--)
-                layers[i].Update(delta);
+            {
+                if (_method == Method.Momentum)
+                {
+                    layers[i].UpdateWithMomentum(delta);
+                }
+                else
+                {
+                    layers[i].Update(delta);
+                }
+            }
         }
         /// <summary>
         /// Функция обучения нейросети
@@ -205,6 +214,7 @@ namespace nn.classes
                         layer.SaveState();
                     }
                 }
+                
                 //по всем векторам выборки
                 for (int i = 0; i < sampleSize; i++)
                 {
@@ -218,7 +228,7 @@ namespace nn.classes
                     //расчитаем ошибку сети для данного элемента выборки
                     EpochError += E(nwOut, Ideal);
                     //скорректируем веса методом backpropagation
-                    CorrectError(Ideal,Sample);
+                    CorrectError(Ideal,Sample,_method);
                 }
 
                 if (Method == Method.Adaptive && epoch>0)
