@@ -90,6 +90,14 @@ namespace nn
             double.TryParse(textBox4.Text, NumberStyles.Any, CultureInfo.InvariantCulture, out e0);
             chart1.Series[0].Points.Clear();
             _network.Delta = delta;
+            if (adaptiveRadio.Checked)
+            {
+                _network.Method = Method.Adaptive;
+            }
+            else if (momentumRadio.Checked)
+            {
+                _network.Method = Method.Momentum;
+            }
             _network.Train(_trainingSet.Samples,
                 _trainingSet.Answers, 
                 iterationsCount, 

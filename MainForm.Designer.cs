@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button5 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.countLabel = new System.Windows.Forms.Label();
             this.classesLabel = new System.Windows.Forms.Label();
@@ -53,24 +54,28 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.total = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.vectorNumber = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button4 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button3 = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.vectorNumber = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.total = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.normalRadio = new System.Windows.Forms.RadioButton();
+            this.adaptiveRadio = new System.Windows.Forms.RadioButton();
+            this.momentumRadio = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -88,9 +93,20 @@
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(236, 166);
+            this.groupBox1.Size = new System.Drawing.Size(236, 181);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
+            // 
+            // button5
+            // 
+            this.button5.Enabled = false;
+            this.button5.Location = new System.Drawing.Point(126, 137);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(99, 23);
+            this.button5.TabIndex = 9;
+            this.button5.Text = "Preview";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
             // richTextBox1
             // 
@@ -176,7 +192,7 @@
             this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.groupBox2.Location = new System.Drawing.Point(248, 6);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(236, 109);
+            this.groupBox2.Size = new System.Drawing.Size(236, 95);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             // 
@@ -304,6 +320,51 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Test";
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(95, 212);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(99, 23);
+            this.button6.TabIndex = 10;
+            this.button6.Text = "Preview";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // total
+            // 
+            this.total.AutoSize = true;
+            this.total.Location = new System.Drawing.Point(42, 213);
+            this.total.Name = "total";
+            this.total.Size = new System.Drawing.Size(13, 13);
+            this.total.TabIndex = 8;
+            this.total.Text = "0";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 213);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Total";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(9, 244);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(14, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "#";
+            // 
+            // vectorNumber
+            // 
+            this.vectorNumber.Location = new System.Drawing.Point(29, 239);
+            this.vectorNumber.Name = "vectorNumber";
+            this.vectorNumber.Size = new System.Drawing.Size(48, 20);
+            this.vectorNumber.TabIndex = 5;
+            this.vectorNumber.Text = "1";
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -355,83 +416,73 @@
             this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea5.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea5);
-            legend5.Name = "Legend1";
-            this.chart1.Legends.Add(legend5);
-            this.chart1.Location = new System.Drawing.Point(6, 176);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(6, 193);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Berry;
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Legend = "Legend1";
-            series5.Name = "Energy";
-            this.chart1.Series.Add(series5);
-            this.chart1.Size = new System.Drawing.Size(727, 276);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Energy";
+            this.chart1.Series.Add(series1);
+            this.chart1.Size = new System.Drawing.Size(727, 259);
             this.chart1.TabIndex = 6;
             this.chart1.Text = "chart1";
             // 
-            // vectorNumber
+            // groupBox5
             // 
-            this.vectorNumber.Location = new System.Drawing.Point(29, 239);
-            this.vectorNumber.Name = "vectorNumber";
-            this.vectorNumber.Size = new System.Drawing.Size(48, 20);
-            this.vectorNumber.TabIndex = 5;
-            this.vectorNumber.Text = "1";
+            this.groupBox5.Controls.Add(this.momentumRadio);
+            this.groupBox5.Controls.Add(this.adaptiveRadio);
+            this.groupBox5.Controls.Add(this.normalRadio);
+            this.groupBox5.Location = new System.Drawing.Point(248, 101);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(236, 86);
+            this.groupBox5.TabIndex = 7;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Method";
             // 
-            // label6
+            // normalRadio
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 244);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(14, 13);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "#";
+            this.normalRadio.AutoSize = true;
+            this.normalRadio.Location = new System.Drawing.Point(6, 14);
+            this.normalRadio.Name = "normalRadio";
+            this.normalRadio.Size = new System.Drawing.Size(58, 17);
+            this.normalRadio.TabIndex = 0;
+            this.normalRadio.TabStop = true;
+            this.normalRadio.Text = "Normal";
+            this.normalRadio.UseVisualStyleBackColor = true;
             // 
-            // label7
+            // adaptiveRadio
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 213);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Total";
+            this.adaptiveRadio.AutoSize = true;
+            this.adaptiveRadio.Location = new System.Drawing.Point(6, 37);
+            this.adaptiveRadio.Name = "adaptiveRadio";
+            this.adaptiveRadio.Size = new System.Drawing.Size(67, 17);
+            this.adaptiveRadio.TabIndex = 0;
+            this.adaptiveRadio.TabStop = true;
+            this.adaptiveRadio.Text = "Adaptive";
+            this.adaptiveRadio.UseVisualStyleBackColor = true;
             // 
-            // total
+            // momentumRadio
             // 
-            this.total.AutoSize = true;
-            this.total.Location = new System.Drawing.Point(42, 213);
-            this.total.Name = "total";
-            this.total.Size = new System.Drawing.Size(13, 13);
-            this.total.TabIndex = 8;
-            this.total.Text = "0";
-            // 
-            // button5
-            // 
-            this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(126, 137);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(99, 23);
-            this.button5.TabIndex = 9;
-            this.button5.Text = "Preview";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click_1);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(95, 212);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(99, 23);
-            this.button6.TabIndex = 10;
-            this.button6.Text = "Preview";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.momentumRadio.AutoSize = true;
+            this.momentumRadio.Location = new System.Drawing.Point(6, 60);
+            this.momentumRadio.Name = "momentumRadio";
+            this.momentumRadio.Size = new System.Drawing.Size(77, 17);
+            this.momentumRadio.TabIndex = 0;
+            this.momentumRadio.TabStop = true;
+            this.momentumRadio.Text = "Momentum";
+            this.momentumRadio.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(934, 463);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
@@ -450,6 +501,8 @@
             this.groupBox4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -490,5 +543,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.RadioButton momentumRadio;
+        private System.Windows.Forms.RadioButton adaptiveRadio;
+        private System.Windows.Forms.RadioButton normalRadio;
     }
 }

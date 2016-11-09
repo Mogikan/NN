@@ -182,15 +182,127 @@ namespace nn.classes
             set { weights[inp, outp] = value; } 
         }
         /// <summary>
-        /// Возвращает или устанавливает состояние всех нейронов слоя
+        /// состояние всех нейронов слоя
         /// </summary>
         public double[] LastOut { get { return lastOut; } set { lastOut = value; } }
         /// <summary>
-        /// Возвращает или устанавливает состояние всех входных сигналов
+        /// входныe сигналы
         /// </summary>
         public double[] LastIn { get { return lastIn; } set { lastIn = value; } }
         public double[] DEDX { get { return dEdX; } }
         public double[,] W { get { return weights; } }
+
+        private double[] _savedLastOut;
+        private double[] _savedLastIn;
+        private double[] _savedDEDX;
+        private double[] _savedDEDY;
+        private double[,] _savedW;
+        private double[,] _savedDEDW;
+
+        public void RestoreState()
+        {            
+            for (int i = 0; i < _savedLastOut.Length; i++)
+            {
+                lastOut[i] = _savedLastOut[i];
+            }
+
+            for (int i = 0; i < _savedLastIn.Length; i++)
+            {
+                lastIn[i] = _savedLastIn[i];
+            }
+
+
+            for (int i = 0; i < _savedDEDX.Length; i++)
+            {
+                dEdX[i] = _savedDEDX[i];
+            }
+
+            for (int i = 0; i < _savedDEDY.Length; i++)
+            {
+                dEdY[i] = _savedDEDY[i];
+            }
+
+            for (int i = 0; i < _savedW.GetLength(0); i++)
+            {
+                for (int j = 0; j < _savedW.GetLength(1); j++)
+                {
+                   weights[i, j] = _savedW[i, j];
+                }
+            }
+
+            for (int i = 0; i < _savedDEDW.GetLength(0); i++)
+            {
+                for (int j = 0; j < _savedDEDW.GetLength(1); j++)
+                {
+                    dEdW[i, j] = _savedDEDW[i, j];
+                }
+            }
+        }
+
+        public void SaveState()
+        {
+            if (_savedLastOut == null)
+            {
+                _savedLastOut = new double[lastOut.Length];
+            }
+            for (int i = 0; i < _savedLastOut.Length; i++)
+            {
+                _savedLastOut[i] = lastOut[i];
+            }
+
+            if (_savedLastIn == null)
+            {
+                _savedLastIn = new double[lastIn.Length];
+            }
+            for (int i = 0; i < _savedLastIn.Length; i++)
+            {
+                _savedLastIn[i] = lastIn[i];
+            }
+
+
+            if (_savedDEDX == null)
+            {
+                _savedDEDX = new double[dEdX.Length];
+            }
+            for (int i = 0; i < _savedDEDX.Length; i++)
+            {
+                _savedDEDX[i] = dEdX[i];
+            }
+
+            if (_savedDEDY == null)
+            {
+                _savedDEDY = new double[dEdY.Length];
+            }
+            for (int i = 0; i < _savedDEDY.Length; i++)
+            {
+                _savedDEDY[i] = dEdY[i];
+            }
+
+            if (_savedW == null)
+            {
+                _savedW = new double[weights.GetLength(0),weights.GetLength(1)];
+            }
+            for (int i = 0; i < _savedW.GetLength(0); i++)
+            {
+                for (int j = 0; j < _savedW.GetLength(1); j++)
+                {
+                    _savedW[i, j] = weights[i, j];
+                }
+            }
+
+            if (_savedDEDW == null)
+            {
+                _savedDEDW = new double[dEdW.GetLength(0),dEdW.GetLength(1)];
+            }
+            for (int i = 0; i < _savedDEDW.GetLength(0); i++)
+            {
+                for (int j = 0; j < _savedDEDW.GetLength(1); j++)
+                {
+                    _savedDEDW[i, j] = dEdW[i, j];
+                }
+            }            
+        }
         #endregion
+        
     }
 }

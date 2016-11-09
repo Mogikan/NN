@@ -38,6 +38,10 @@ namespace nn.classes
         /// </summary>
         private int IN=0, OUT=0, layersCount=0;
         private double delta;
+        private Method _method;
+
+
+
         #endregion
 
         #region methods
@@ -49,7 +53,7 @@ namespace nn.classes
         /// <param name="layersSizes">Набор параметров переменной длины, 
         /// содержит размеры слоев сети</param>
         public NeuralNetwork(int inputs, int[] layersSizes)
-        {
+        {           
             //число слоев определяется длиной массива с их размерами
             layersCount = layersSizes.Length;
             //выделим память под слои
@@ -185,13 +189,22 @@ namespace nn.classes
             chart.Series[0].Points.Clear();// = new Visn.Charting.Series();
             //накопленная ошибка итерации
             double EpochError=0;
+            double oldError;
             //номер текущей итерации
             int epoch;
             //цикл по всем итерациям
             for (epoch = 0; epoch < Epochs; epoch++)
             {
+                oldError = EpochError;
                 //обнулить накопленную ошибку
                 EpochError = .0;
+                if (Method == Method.Adaptive && epoch > 0)
+                {
+                    foreach (var layer in layers)
+                    {
+                        layer.SaveState();
+                    }
+                }
                 //по всем векторам выборки
                 for (int i = 0; i < sampleSize; i++)
                 {
@@ -207,6 +220,24 @@ namespace nn.classes
                     //скорректируем веса методом backpropagation
                     CorrectError(Ideal,Sample);
                 }
+
+                if (Method == Method.Adaptive && epoch>0)
+                {
+                    if (EpochError < oldError)
+                    {
+                        delta = delta * 1.02;
+                    }
+                    if (EpochError > oldError * 1.04)
+                    {
+                        foreach (var layer in layers)
+                        {
+                            layer.RestoreState();
+                        }
+                        delta = delta * 0.7;
+                    }     
+
+                }
+
                 if (epoch % displayStep == 0)
                 {
                     chart.Series[0].Points.AddXY(epoch, EpochError);
@@ -224,5 +255,25 @@ namespace nn.classes
         }
         #endregion
         public double Delta { get { return delta; } set { delta = value; } }
+
+        public Method Method
+        {
+            get
+            {
+                return _method;
+            }
+
+            set
+            {
+                _method = value;
+            }
+        }
+    }
+
+    public enum Method
+    {
+        Normal,
+        Adaptive,
+        Momentum,
     }
 }
