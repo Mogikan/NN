@@ -1,1 +1,1 @@
-# NN
+Neural network with hidden layer.
